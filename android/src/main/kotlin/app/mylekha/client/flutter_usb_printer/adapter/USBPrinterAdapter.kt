@@ -63,7 +63,19 @@ class USBPrinterAdapter {
                         )
                         mUsbDevice = usbDevice
 
+
+                        Toast.makeText(
+                            context,
+                            "Success to grant permission for device " + usbDevice!!.deviceId + ", vendor_id: " + usbDevice.vendorId + " product_id: " + usbDevice.productId,
+                            Toast.LENGTH_LONG
+                        ).show()
+
                         if (mPendingDataToPrint != null) {
+                            Toast.makeText(
+                                context,
+                                "Pending data send to printer.",
+                                Toast.LENGTH_LONG
+                            ).show();
                             if (write(mPendingDataToPrint!!)) {
                                 mPendingDataToPrint = null
                             }
@@ -218,9 +230,6 @@ class USBPrinterAdapter {
     fun printText(text: String): Boolean {
         Log.v(LOG_TAG, "start to print text")
 
-
-
-
         return when (openConnection()) {
             ConnectionResult.SUCCESS -> {
                 Thread {
@@ -335,6 +344,7 @@ class USBPrinterAdapter {
                         mUsbDeviceConnection!!.bulkTransfer(mEndPoint, bytes, bytes.size, 100000)
                     Log.i(LOG_TAG, "Transfer Result: $transferResult")
                     if (transferResult == -1) {
+                        mPendingDataToPrint = bytes;
                         closeConnectionIfExists()
                         tryToReconnectFailedDevice()
                     }
@@ -358,6 +368,7 @@ class USBPrinterAdapter {
                     mUsbDeviceConnection!!.bulkTransfer(mEndPoint, bytes, bytes.size, 100000)
                 Log.i(LOG_TAG, "Transfer Result: $transferResult")
                 if (transferResult == -1) {
+                    mPendingDataToPrint = bytes;
                     closeConnectionIfExists()
                     tryToReconnectFailedDevice()
                 }
@@ -379,8 +390,19 @@ class USBPrinterAdapter {
 
 
     private fun tryToReconnectFailedDevice() {
-        val usbDevices = ArrayList(mUSBManager!!.deviceList.values);
-        val device = usbDevices[0];
-        selectDevice(device.vendorId, device.productId);
+
+        val usbDevices = ArrayList(mUSBManager!!.deviceList.values)
+
+        if (usbDevices.isNotEmpty()) {
+            val device = usbDevices[0]
+            selectDevice(device.vendorId, device.productId)
+            return;
+        }
+
+        Log.e(LOG_TAG, "No USB devices available for reconnection")
+        Toast.makeText(mContext, "No USB devices available for reconnection", Toast.LENGTH_SHORT)
+            .show()
+
     }
+
 }
