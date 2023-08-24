@@ -14,7 +14,7 @@ import android.widget.Toast
 import java.nio.charset.Charset
 import java.util.*
 
-private enum class ConnectionResult {
+enum class ConnectionResult {
     SUCCESS,
     DEVICE_NOT_INITIALIZED,
     USB_MANAGER_NOT_INITIALIZED,
@@ -412,7 +412,11 @@ class USBPrinterAdapter {
             } else {
                 usbDevice.deviceName
             }
-            if (!productName.isNullOrBlank() && !productName.contains("ilitek tp", ignoreCase = true)) {
+            if (!productName.isNullOrBlank() && !productName.contains(
+                    "ilitek tp",
+                    ignoreCase = true
+                )
+            ) {
                 filteredList.add(usbDevice)
             }
         }
