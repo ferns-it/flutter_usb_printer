@@ -283,7 +283,7 @@ class USBPrinterAdapter {
                         mUsbDeviceConnection!!.bulkTransfer(mEndPoint, bytes, bytes.size, 100000)
                     Log.i(LOG_TAG, "Transfer Result: $transferResult")
                     if (transferResult == -1) {
-                       val deviceId = mUsbDevice!!.deviceId;
+                        val deviceId = mUsbDevice!!.deviceId;
                         closeConnectionIfExists()
                         tryToReconnectFailedDevice()
                     }
@@ -391,19 +391,47 @@ class USBPrinterAdapter {
 
 
     private fun tryToReconnectFailedDevice() {
-
-        val usbDevices = ArrayList(mUSBManager!!.deviceList.values)
-
+        val usbDevices = getUSBDeviceList();
         if (usbDevices.isNotEmpty()) {
             val device = usbDevices[0]
-            selectDevice(device.vendorId, device.productId)
+            selectDevice(device["vendorId"], device["productId"])
             return;
         }
-
         Log.e(LOG_TAG, "No USB devices available for reconnection")
         Toast.makeText(mContext, "No USB devices available for reconnection", Toast.LENGTH_SHORT)
             .show()
+    }
 
+
+    private fun getUSBDeviceList(): ArrayList<HashMap<String, String?>> {
+
+        val usbDevices = adapter!!.getDeviceList()
+        val list = ArrayList<HashMap<String, String?>>()
+        for (usbDevice in usbDevices) {
+            val deviceMap: HashMap<String, String?> = HashMap()
+            deviceMap["deviceName"] = usbDevice.deviceName
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                deviceMap["manufacturer"] = usbDevice.manufacturerName
+            } else {
+                deviceMap["manufacturer"] = "unknown";
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                deviceMap["productName"] = usbDevice.productName
+            } else {
+                deviceMap["productName"] = "unknown";
+            }
+
+            val productName = deviceMap["productName"]?.toLowerCase()
+            val containsIlitekTP = productName?.contains("ilitek tp") == true
+            if (containsIlitekTP) continue
+
+            deviceMap["deviceId"] = usbDevice.deviceId.toString()
+            deviceMap["vendorId"] = usbDevice.vendorId.toString()
+            deviceMap["productId"] = usbDevice.productId.toString()
+            list.add(deviceMap)
+            print("usbDevice ${usbDevice}");
+        }
+        return list;
     }
 
 }
