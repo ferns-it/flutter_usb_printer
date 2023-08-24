@@ -402,26 +402,21 @@ class USBPrinterAdapter {
     }
 
 
-    private fun getFilteredUSBDeviceList(): ArrayList<UsbDevice> {
-        // Get the list of USB devices from the adapter
+    private fun getFilteredUSBDeviceList(): List<UsbDevice> {
         val usbDevices = getDeviceList()
-
-        // Create a list to hold the filtered USB devices
         val filteredList = ArrayList<UsbDevice>()
 
-        // Iterate through each USB device in the list
-        for (usbDevice in usbDevices.values) {
-            // Get the lowercase product name of the USB device
-            val productName = usbDevice.productName?.toLowerCase()
-
-            // Check if the product name contains "ilitek tp"
-            val containsIlitekTP = productName?.contains("ilitek tp") == true
-
-            // If the product name does not contain "ilitek tp", add the USB device to the filtered list
-            if (!containsIlitekTP) {
+        for (usbDevice in usbDevices) {
+            val productName = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                usbDevice.productName
+            } else {
+                usbDevice.deviceName
+            }
+            if (!productName.isNullOrBlank() && !productName.contains("ilitek tp", ignoreCase = true)) {
                 filteredList.add(usbDevice)
             }
         }
-        // Return the list of USB devices that do not have a product name containing "ilite
-
+        return filteredList
     }
+
+}
