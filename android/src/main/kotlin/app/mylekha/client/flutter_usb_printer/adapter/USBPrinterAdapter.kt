@@ -404,7 +404,7 @@ class USBPrinterAdapter {
 
     private fun getFilteredUSBDeviceList(): ArrayList<UsbDevice> {
         // Get the list of USB devices from the adapter
-        val usbDevices = adapter!!.getDeviceList()
+        val usbDevices = getDeviceList()
 
         // Create a list to hold the filtered USB devices
         val filteredList = ArrayList<UsbDevice>()
