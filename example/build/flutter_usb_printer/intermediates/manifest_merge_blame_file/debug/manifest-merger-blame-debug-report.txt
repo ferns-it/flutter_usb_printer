@@ -1,0 +1,12 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="app.mylekha.client.flutter_usb_printer" >
+4
+5    <uses-sdk android:minSdkVersion="16" />
+5-->C:\Projects\food_page\packages\flutter_usb_printer\android\src\main\AndroidManifest.xml
+6
+7    <uses-feature android:name="android.hardware.usb.host" />
+7-->C:\Projects\food_page\packages\flutter_usb_printer\android\src\main\AndroidManifest.xml:3:3-60
+7-->C:\Projects\food_page\packages\flutter_usb_printer\android\src\main\AndroidManifest.xml:3:17-57
+8
+9</manifest>

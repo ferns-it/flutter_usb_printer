@@ -234,16 +234,9 @@ class USBPrinterAdapter {
             ConnectionResult.SUCCESS -> {
                 Thread {
                     val bytes = text.toByteArray(Charset.forName("UTF-8"))
-                    val transferResult =
+                    val b =
                         mUsbDeviceConnection!!.bulkTransfer(mEndPoint, bytes, bytes.size, 100000)
-                    Log.i(LOG_TAG, "Return Status: b-->$transferResult")
-
-                    if (transferResult == -1) {
-                        val productId = mUsbDevice!!.productId;
-                        val vendorId = mUsbDevice!!.vendorId;
-                        closeConnectionIfExists()
-                        tryToReconnectFailedDevice(productId, vendorId)
-                    }
+                    Log.i(LOG_TAG, "Return Status: b-->$b")
                 }.start()
                 return true
             }
@@ -261,15 +254,9 @@ class USBPrinterAdapter {
             ConnectionResult.CONNECTION_ALREADY_OPEN -> {
                 Thread {
                     val bytes = text.toByteArray(Charset.forName("UTF-8"))
-                    val transferResult =
+                    val b =
                         mUsbDeviceConnection!!.bulkTransfer(mEndPoint, bytes, bytes.size, 100000)
-                    Log.i(LOG_TAG, "Return Status: b-->$transferResult")
-                    if (transferResult == -1) {
-                        val productId = mUsbDevice!!.productId;
-                        val vendorId = mUsbDevice!!.vendorId;
-                        closeConnectionIfExists()
-                        tryToReconnectFailedDevice(productId, vendorId)
-                    }
+                    Log.i(LOG_TAG, "Return Status: b-->$b")
                 }.start()
                 return true
             }
@@ -296,10 +283,9 @@ class USBPrinterAdapter {
                         mUsbDeviceConnection!!.bulkTransfer(mEndPoint, bytes, bytes.size, 100000)
                     Log.i(LOG_TAG, "Transfer Result: $transferResult")
                     if (transferResult == -1) {
-                        val productId = mUsbDevice!!.productId;
-                        val vendorId = mUsbDevice!!.vendorId;
+                       val deviceId = mUsbDevice!!.deviceId;
                         closeConnectionIfExists()
-                        tryToReconnectFailedDevice(productId, vendorId)
+                        tryToReconnectFailedDevice()
                     }
                 }.start()
                 true
@@ -322,10 +308,8 @@ class USBPrinterAdapter {
                         mUsbDeviceConnection!!.bulkTransfer(mEndPoint, bytes, bytes.size, 100000)
                     Log.i(LOG_TAG, "Transfer Result: $transferResult")
                     if (transferResult == -1) {
-                        val productId = mUsbDevice!!.productId;
-                        val vendorId = mUsbDevice!!.vendorId;
                         closeConnectionIfExists()
-                        tryToReconnectFailedDevice(productId, vendorId)
+                        tryToReconnectFailedDevice()
                     }
                 }.start()
                 true
@@ -361,10 +345,9 @@ class USBPrinterAdapter {
                         mUsbDeviceConnection!!.bulkTransfer(mEndPoint, bytes, bytes.size, 100000)
                     Log.i(LOG_TAG, "Transfer Result: $transferResult")
                     if (transferResult == -1) {
-                        val productId = mUsbDevice!!.productId;
-                        val vendorId = mUsbDevice!!.vendorId;
+                        mPendingDataToPrint = bytes;
                         closeConnectionIfExists()
-                        tryToReconnectFailedDevice(productId, vendorId)
+                        tryToReconnectFailedDevice()
                     }
                 }.start()
                 true
@@ -386,10 +369,9 @@ class USBPrinterAdapter {
                     mUsbDeviceConnection!!.bulkTransfer(mEndPoint, bytes, bytes.size, 100000)
                 Log.i(LOG_TAG, "Transfer Result: $transferResult")
                 if (transferResult == -1) {
-                    val productId = mUsbDevice!!.productId;
-                    val vendorId = mUsbDevice!!.vendorId;
+                    mPendingDataToPrint = bytes;
                     closeConnectionIfExists()
-                    tryToReconnectFailedDevice(productId, vendorId)
+                    tryToReconnectFailedDevice()
                 }
                 true
             }
@@ -408,12 +390,16 @@ class USBPrinterAdapter {
     }
 
 
-    private fun tryToReconnectFailedDevice(productId: Int, vendorId: Int) {
+    private fun tryToReconnectFailedDevice() {
+
         val usbDevices = ArrayList(mUSBManager!!.deviceList.values)
+
         if (usbDevices.isNotEmpty()) {
-            selectDevice(productId, vendorId)
+            val device = usbDevices[0]
+            selectDevice(device.vendorId, device.productId)
             return;
         }
+
         Log.e(LOG_TAG, "No USB devices available for reconnection")
         Toast.makeText(mContext, "No USB devices available for reconnection", Toast.LENGTH_SHORT)
             .show()
