@@ -413,7 +413,7 @@ class USBPrinterAdapter {
                 usbDevice.deviceName
             }
             if (!productName.isNullOrBlank() && !productName.contains(
-                    "ilitek tp",
+                    "ilitek-tp",
                     ignoreCase = true
                 )
             ) {

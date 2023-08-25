@@ -83,7 +83,7 @@ class FlutterUsbPrinterPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
       }
 
       val productName = deviceMap["productName"]?.toLowerCase()
-      val containsIlitekTP = productName?.contains("ilitek tp") == true
+      val containsIlitekTP = productName?.contains("ilitek-tp") == true
       if(containsIlitekTP) continue
 
       deviceMap["deviceId"] = usbDevice.deviceId.toString()
