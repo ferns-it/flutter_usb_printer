@@ -1,4 +1,4 @@
-package android
+
 
 group 'app.mylekha.client.flutter_usb_printer'
 version '1.0-SNAPSHOT'

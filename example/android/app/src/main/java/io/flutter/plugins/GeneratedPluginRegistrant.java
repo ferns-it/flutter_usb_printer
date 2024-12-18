@@ -17,7 +17,7 @@ public final class GeneratedPluginRegistrant {
   public static void registerWith(@NonNull FlutterEngine flutterEngine) {
     try {
       flutterEngine.getPlugins().add(new app.mylekha.client.flutter_usb_printer.FlutterUsbPrinterPlugin());
-    } catch(Exception e) {
+    } catch (Exception e) {
       Log.e(TAG, "Error registering plugin flutter_usb_printer, app.mylekha.client.flutter_usb_printer.FlutterUsbPrinterPlugin", e);
     }
   }
