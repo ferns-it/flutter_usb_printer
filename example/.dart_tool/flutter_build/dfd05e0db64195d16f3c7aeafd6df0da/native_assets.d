@@ -1,0 +1,1 @@
+ D:\\flutter\ projects\\flutter_usb_printer\\example\\.dart_tool\\flutter_build\\dfd05e0db64195d16f3c7aeafd6df0da\\native_assets.yaml: 

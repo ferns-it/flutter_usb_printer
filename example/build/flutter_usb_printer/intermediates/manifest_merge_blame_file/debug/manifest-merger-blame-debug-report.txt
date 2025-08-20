@@ -4,12 +4,12 @@
 4
 5    <uses-sdk
 6        android:minSdkVersion="16"
-6-->F:\flutter_plugins\flutter_usb_printer\android\src\main\AndroidManifest.xml
+6-->D:\flutter projects\flutter_usb_printer\android\src\main\AndroidManifest.xml
 7        android:targetSdkVersion="16" />
-7-->F:\flutter_plugins\flutter_usb_printer\android\src\main\AndroidManifest.xml
+7-->D:\flutter projects\flutter_usb_printer\android\src\main\AndroidManifest.xml
 8
 9    <uses-feature android:name="android.hardware.usb.host" />
-9-->F:\flutter_plugins\flutter_usb_printer\android\src\main\AndroidManifest.xml:3:3-60
-9-->F:\flutter_plugins\flutter_usb_printer\android\src\main\AndroidManifest.xml:3:17-57
+9-->D:\flutter projects\flutter_usb_printer\android\src\main\AndroidManifest.xml:3:3-60
+9-->D:\flutter projects\flutter_usb_printer\android\src\main\AndroidManifest.xml:3:17-57
 10
 11</manifest>

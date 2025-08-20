@@ -1,9 +1,9 @@
-#Wed Dec 18 15:18:13 IST 2024
-base.0=F\:\\flutter_plugins\\flutter_usb_printer\\example\\build\\app\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
-base.1=F\:\\flutter_plugins\\flutter_usb_printer\\example\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\0\\classes.dex
-base.2=F\:\\flutter_plugins\\flutter_usb_printer\\example\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
-base.3=F\:\\flutter_plugins\\flutter_usb_printer\\example\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\1\\classes.dex
-base.4=F\:\\flutter_plugins\\flutter_usb_printer\\example\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\8\\classes.dex
+#Wed Aug 20 15:47:24 IST 2025
+base.0=D\:\\flutter projects\\flutter_usb_printer\\example\\build\\app\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
+base.1=D\:\\flutter projects\\flutter_usb_printer\\example\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\0\\classes.dex
+base.2=D\:\\flutter projects\\flutter_usb_printer\\example\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
+base.3=D\:\\flutter projects\\flutter_usb_printer\\example\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\1\\classes.dex
+base.4=D\:\\flutter projects\\flutter_usb_printer\\example\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\8\\classes.dex
 path.0=classes.dex
 path.1=0/classes.dex
 path.2=0/classes.dex

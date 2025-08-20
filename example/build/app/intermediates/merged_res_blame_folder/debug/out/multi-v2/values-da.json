@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "F:\\flutter_plugins\\flutter_usb_printer\\example\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-da\\values-da.xml",
+            "outputFile": "D:\\flutter projects\\flutter_usb_printer\\example\\build\\app\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-da\\values-da.xml",
             "map": [
                 {
                     "source": "C:\\Users\\user\\.gradle\\caches\\transforms-3\\41364b18c65335c1a88ef5291c2050c5\\transformed\\core-1.13.1\\res\\values-da\\values-da.xml",
