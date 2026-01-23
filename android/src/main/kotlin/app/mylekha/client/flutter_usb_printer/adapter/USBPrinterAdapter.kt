@@ -218,6 +218,7 @@ class USBPrinterAdapter {
                         usbDevice,
                         mPermissionIndent!!
                     )
+                    mUsbDevice = usbDevice
 
                     // mUSBManager!!.requestPermission(usbDevice, mPermissionIndent)
                     return true
