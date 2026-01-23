@@ -105,13 +105,35 @@ class USBPrinterAdapter {
     }
 
     private fun ensureInitialized(): Boolean {
-        if (mContext == null || mUSBManager == null || mPermissionIndent == null) {
-            Log.e(LOG_TAG, "ensureInitialized: mContext: $mContext | mUSBManager: $mUSBManager | mPermissionIndent: $mPermissionIndent", )
-            Log.e(LOG_TAG, "USBPrinterAdapter not initialized:ensureInitialized() ")
+        if (mContext == null) {
+            Log.e(LOG_TAG, "ensureInitialized failed: mContext is null")
             return false
         }
+
+        if (mUSBManager == null) {
+            mUSBManager =
+                mContext!!.getSystemService(Context.USB_SERVICE) as UsbManager
+            Log.d(LOG_TAG, "UsbManager initialized: $mUSBManager")
+        }
+
+        if (mPermissionIndent == null) {
+            val intent = Intent(ACTION_USB_PERMISSION).apply {
+                setPackage(mContext!!.packageName)
+            }
+
+            mPermissionIndent = PendingIntent.getBroadcast(
+                mContext,
+                0,
+                intent,
+                PendingIntent.FLAG_MUTABLE   // 🔴 REQUIRED on Android 12+
+            )
+
+            Log.d(LOG_TAG, "USB Permission PendingIntent created: $mPermissionIndent")
+        }
+
         return true
     }
+
 
     @SuppressLint("UnspecifiedImmutableFlag")
     fun init(reactContext: Context?) {
