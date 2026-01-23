@@ -189,82 +189,42 @@ class USBPrinterAdapter {
     }
 
     fun selectDevice(vendorId: Int, productId: Int): Boolean {
-        Log.d(LOG_TAG, "selectDevice() called")
-        Log.d(LOG_TAG, "Requested vendorId=$vendorId, productId=$productId")
-
-        if (mUsbDevice != null) {
-            Log.d(
-                LOG_TAG,
-                "Current device vendorId=${mUsbDevice!!.vendorId}, productId=${mUsbDevice!!.productId}"
-            )
-        } else {
-            Log.d(LOG_TAG, "No device currently selected")
-        }
-
-        if (mUsbDevice == null ||
+        if (
+            mUsbDevice == null ||
             mUsbDevice!!.vendorId != vendorId ||
             mUsbDevice!!.productId != productId
         ) {
-
-            Log.d(LOG_TAG, "Closing existing connection (if any)")
             closeConnectionIfExists()
 
             val usbDevices = getDeviceList()
-            Log.d(LOG_TAG, "USB device count: ${usbDevices.size}")
-
             for (usbDevice in usbDevices) {
-                Log.d(
-                    LOG_TAG,
-                    "Found device -> vendorId=${usbDevice.vendorId}, productId=${usbDevice.productId}, " +
-                            "deviceName=${usbDevice.deviceName}"
-                )
-
-                if (usbDevice.vendorId == vendorId && usbDevice.productId == productId) {
-
-                    Log.i(
+                if (
+                    usbDevice.vendorId == vendorId &&
+                    usbDevice.productId == productId
+                ) {
+                    Log.v(
                         LOG_TAG,
-                        "Target device matched -> vendorId=${usbDevice.vendorId}, productId=${usbDevice.productId}"
+                        "Request for device: vendor_id: " +
+                                usbDevice.vendorId +
+                                ", product_id: " +
+                                usbDevice.productId
                     )
 
                     closeConnectionIfExists()
 
-                    if (!ensureInitialized()) {
-                        Log.e(LOG_TAG, "ensureInitialized() failed")
-                        return false
-                    }
+                    if (!ensureInitialized()) return false
 
-                    if (mUSBManager == null) {
-                        Log.e(LOG_TAG, "UsbManager is NULL")
-                        return false
-                    }
-
-                    if (mPermissionIndent == null) {
-                        Log.e(LOG_TAG, "Permission PendingIntent is NULL (this will crash requestPermission)")
-                        return false
-                    }
-
-                    Log.d(
-                        LOG_TAG,
-                        "Requesting USB permission using PendingIntent=$mPermissionIndent"
+                    mUSBManager!!.requestPermission(
+                        usbDevice,
+                        mPermissionIndent!!
                     )
 
-                    try {
-                        mUSBManager!!.requestPermission(usbDevice, mPermissionIndent!!)
-                        Log.i(LOG_TAG, "requestPermission() called successfully")
-                    } catch (e: Exception) {
-                        Log.e(LOG_TAG, "requestPermission() failed", e)
-                        return false
-                    }
-
+                    // mUSBManager!!.requestPermission(usbDevice, mPermissionIndent)
                     return true
                 }
             }
-
-            Log.w(LOG_TAG, "No matching USB device found")
             return false
         }
-
-        Log.d(LOG_TAG, "Requested device already selected")
         return true
     }
 
