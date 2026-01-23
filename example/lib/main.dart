@@ -93,6 +93,7 @@ class _MyAppState extends State<MyApp> {
               onLongPress: () {
                 _print();
               },
+              tileColor: connected ? Colors.green.shade200 : null,
               leading: new Icon(Icons.usb),
               title: new Text(device['manufacturer'] + " " + device['productName']),
               subtitle: new Text(device['vendorId'] + " " + device['productId']),

@@ -106,7 +106,8 @@ class USBPrinterAdapter {
 
     private fun ensureInitialized(): Boolean {
         if (mContext == null || mUSBManager == null || mPermissionIndent == null) {
-            Log.e(LOG_TAG, "USBPrinterAdapter not initialized")
+            Log.e(LOG_TAG, "ensureInitialized: mContext: $mContext | mUSBManager: $mUSBManager | mPermissionIndent: $mPermissionIndent", )
+            Log.e(LOG_TAG, "USBPrinterAdapter not initialized:ensureInitialized() ")
             return false
         }
         return true
@@ -166,31 +167,85 @@ class USBPrinterAdapter {
     }
 
     fun selectDevice(vendorId: Int, productId: Int): Boolean {
-        if (mUsbDevice == null || mUsbDevice!!.vendorId != vendorId || mUsbDevice!!.productId != productId) {
+        Log.d(LOG_TAG, "selectDevice() called")
+        Log.d(LOG_TAG, "Requested vendorId=$vendorId, productId=$productId")
+
+        if (mUsbDevice != null) {
+            Log.d(
+                LOG_TAG,
+                "Current device vendorId=${mUsbDevice!!.vendorId}, productId=${mUsbDevice!!.productId}"
+            )
+        } else {
+            Log.d(LOG_TAG, "No device currently selected")
+        }
+
+        if (mUsbDevice == null ||
+            mUsbDevice!!.vendorId != vendorId ||
+            mUsbDevice!!.productId != productId
+        ) {
+
+            Log.d(LOG_TAG, "Closing existing connection (if any)")
             closeConnectionIfExists()
+
             val usbDevices = getDeviceList()
+            Log.d(LOG_TAG, "USB device count: ${usbDevices.size}")
+
             for (usbDevice in usbDevices) {
+                Log.d(
+                    LOG_TAG,
+                    "Found device -> vendorId=${usbDevice.vendorId}, productId=${usbDevice.productId}, " +
+                            "deviceName=${usbDevice.deviceName}"
+                )
+
                 if (usbDevice.vendorId == vendorId && usbDevice.productId == productId) {
-                    Log.v(
+
+                    Log.i(
                         LOG_TAG,
-                        "Request for device: vendor_id: " + usbDevice.vendorId + ", product_id: " + usbDevice.productId
+                        "Target device matched -> vendorId=${usbDevice.vendorId}, productId=${usbDevice.productId}"
                     )
+
                     closeConnectionIfExists()
-                    if (!ensureInitialized()) return false
 
-                    mUSBManager!!.requestPermission(
-                        usbDevice,
-                        mPermissionIndent!!
+                    if (!ensureInitialized()) {
+                        Log.e(LOG_TAG, "ensureInitialized() failed")
+                        return false
+                    }
+
+                    if (mUSBManager == null) {
+                        Log.e(LOG_TAG, "UsbManager is NULL")
+                        return false
+                    }
+
+                    if (mPermissionIndent == null) {
+                        Log.e(LOG_TAG, "Permission PendingIntent is NULL (this will crash requestPermission)")
+                        return false
+                    }
+
+                    Log.d(
+                        LOG_TAG,
+                        "Requesting USB permission using PendingIntent=$mPermissionIndent"
                     )
 
-//                    mUSBManager!!.requestPermission(usbDevice, mPermissionIndent)
+                    try {
+                        mUSBManager!!.requestPermission(usbDevice, mPermissionIndent!!)
+                        Log.i(LOG_TAG, "requestPermission() called successfully")
+                    } catch (e: Exception) {
+                        Log.e(LOG_TAG, "requestPermission() failed", e)
+                        return false
+                    }
+
                     return true
                 }
             }
+
+            Log.w(LOG_TAG, "No matching USB device found")
             return false
         }
+
+        Log.d(LOG_TAG, "Requested device already selected")
         return true
     }
+
 
 
     fun reconnectedRemovedDevice(usbDevice: UsbDevice) {
@@ -292,7 +347,7 @@ class USBPrinterAdapter {
     }
 
     fun printRawText(data: String): Boolean {
-        Log.v(LOG_TAG, "start to print raw data $data")
+        Log.v(LOG_TAG, "start to print raw data - test $data")
         return when (openConnection()) {
             ConnectionResult.SUCCESS -> {
                 Thread {
@@ -348,7 +403,7 @@ class USBPrinterAdapter {
 
 
     fun write(bytes: ByteArray): Boolean {
-        Log.v(LOG_TAG, "start to print raw data $bytes")
+        Log.v(LOG_TAG, "start to print raw data- msg from android $bytes")
 
         val connectionResult = openConnection {
             mPendingDataToPrint = bytes;
