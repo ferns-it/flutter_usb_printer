@@ -104,6 +104,14 @@ class USBPrinterAdapter {
         }
     }
 
+    private fun ensureInitialized(): Boolean {
+        if (mContext == null || mUSBManager == null || mPermissionIndent == null) {
+            Log.e(LOG_TAG, "USBPrinterAdapter not initialized")
+            return false
+        }
+        return true
+    }
+
     @SuppressLint("UnspecifiedImmutableFlag")
     fun init(reactContext: Context?) {
         mContext = reactContext
@@ -168,7 +176,14 @@ class USBPrinterAdapter {
                         "Request for device: vendor_id: " + usbDevice.vendorId + ", product_id: " + usbDevice.productId
                     )
                     closeConnectionIfExists()
-                    mUSBManager!!.requestPermission(usbDevice, mPermissionIndent)
+                    if (!ensureInitialized()) return false
+
+                    mUSBManager!!.requestPermission(
+                        usbDevice,
+                        mPermissionIndent!!
+                    )
+
+//                    mUSBManager!!.requestPermission(usbDevice, mPermissionIndent)
                     return true
                 }
             }
@@ -179,7 +194,10 @@ class USBPrinterAdapter {
 
 
     fun reconnectedRemovedDevice(usbDevice: UsbDevice) {
-        mUSBManager!!.requestPermission(usbDevice, mPermissionIndent)
+        if (!ensureInitialized()) return
+        mUSBManager!!.requestPermission(usbDevice, mPermissionIndent!!)
+
+//        mUSBManager!!.requestPermission(usbDevice, mPermissionIndent)
     }
 
 

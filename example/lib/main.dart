@@ -48,11 +48,10 @@ class _MyAppState extends State<MyApp> {
 
   _print() async {
     try {
-      var data = Uint8List.fromList(
-          utf8.encode(" Hello world Testing ESC POS printer..."));
+      var data = Uint8List.fromList(utf8.encode(
+        " Hello world Testing ESC POS printer...Hello world Testing ESC POS printer...Hello world Testing ESC POS printer...Hello world Testing ESC POS printer...Hello world Testing ESC POS printer...Hello world Testing ESC POS printer...Hello world Testing ESC POS printer...",
+      ));
       await flutterUsbPrinter.write(data);
-      // await FlutterUsbPrinter.printRawData("text");
-      // await FlutterUsbPrinter.printText("Testing ESC POS printer...");
     } on PlatformException {
       //response = 'Failed to get platform version.';
     }
@@ -65,9 +64,7 @@ class _MyAppState extends State<MyApp> {
         appBar: new AppBar(
           title: new Text('USB PRINTER'),
           actions: <Widget>[
-            new IconButton(
-                icon: new Icon(Icons.refresh),
-                onPressed: () => _getDevicelist()),
+            new IconButton(icon: new Icon(Icons.refresh), onPressed: () => _getDevicelist()),
             connected == true
                 ? new IconButton(
                     icon: new Icon(Icons.print),
@@ -91,14 +88,14 @@ class _MyAppState extends State<MyApp> {
     return devices
         .map((device) => new ListTile(
               onTap: () {
-                _connect(int.parse(device['vendorId']),
-                    int.parse(device['productId']));
+                _connect(int.parse(device['vendorId']), int.parse(device['productId']));
+              },
+              onLongPress: () {
+                _print();
               },
               leading: new Icon(Icons.usb),
-              title: new Text(
-                  device['manufacturer'] + " " + device['productName']),
-              subtitle:
-                  new Text(device['vendorId'] + " " + device['productId']),
+              title: new Text(device['manufacturer'] + " " + device['productName']),
+              subtitle: new Text(device['vendorId'] + " " + device['productId']),
             ))
         .toList();
   }
