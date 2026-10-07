@@ -45,13 +45,13 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///C:/flutter/flutter/packages/flutter",
+      "rootUri": "file:///C:/flutter/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///C:/flutter/flutter/packages/flutter_test",
+      "rootUri": "file:///C:/flutter/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -59,7 +59,7 @@
       "name": "flutter_usb_printer",
       "rootUri": "../../",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "3.0"
     },
     {
       "name": "leak_tracker",
@@ -105,7 +105,7 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///C:/flutter/flutter/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///C:/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -164,10 +164,10 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2026-01-23T06:15:35.426194Z",
+  "generated": "2026-10-07T05:14:13.879058Z",
   "generator": "pub",
   "generatorVersion": "3.5.3",
-  "flutterRoot": "file:///C:/flutter/flutter",
+  "flutterRoot": "file:///C:/flutter",
   "flutterVersion": "3.24.3",
   "pubCache": "file:///C:/Users/user/AppData/Local/Pub/Cache"
 }

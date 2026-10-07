@@ -1,6 +1,5 @@
 package app.mylekha.client.flutter_usb_printer.adapter
 
-import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -125,7 +124,7 @@ class USBPrinterAdapter {
                 mContext,
                 0,
                 intent,
-                PendingIntent.FLAG_MUTABLE   // 🔴 REQUIRED on Android 12+
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
             Log.d(LOG_TAG, "USB Permission PendingIntent created: $mPermissionIndent")
@@ -135,34 +134,32 @@ class USBPrinterAdapter {
     }
 
 
-    @SuppressLint("UnspecifiedImmutableFlag")
     fun init(reactContext: Context?) {
-        mContext = reactContext
-        mUSBManager = mContext!!.getSystemService(Context.USB_SERVICE) as UsbManager
-        mPermissionIndent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            PendingIntent.getBroadcast(
-                mContext,
-                0,
-                Intent(ACTION_USB_PERMISSION),
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
-            )
-        } else {
-            PendingIntent.getBroadcast(
-                mContext,
-                0,
-                Intent(ACTION_USB_PERMISSION),
-                PendingIntent.FLAG_UPDATE_CURRENT
-            )
-        }
-        val filter = IntentFilter(ACTION_USB_PERMISSION)
-        filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED)
-        filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
-        mContext!!.registerReceiver(mUsbDeviceReceiver, filter)
+    mContext = reactContext
+    mUSBManager = mContext!!.getSystemService(Context.USB_SERVICE) as UsbManager
 
-
-
-        Log.v(LOG_TAG, "USB Printer initialized")
+    val permissionIntent = Intent(ACTION_USB_PERMISSION).apply {
+        setPackage(mContext!!.packageName)
     }
+
+    mPermissionIndent = PendingIntent.getBroadcast(
+        mContext,
+        0,
+        permissionIntent,
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
+
+    val filter = IntentFilter(ACTION_USB_PERMISSION)
+    filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED)
+    filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED)
+
+    mContext!!.registerReceiver(
+        mUsbDeviceReceiver,
+        filter
+    )
+
+    Log.v(LOG_TAG, "USB Printer initialized")
+}
 
 
     fun closeConnectionIfExists() {
